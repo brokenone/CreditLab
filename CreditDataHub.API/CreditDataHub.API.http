@@ -1,0 +1,6 @@
+@CreditDataHub.API_HostAddress = http://localhost:5241
+
+GET {{CreditDataHub.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
