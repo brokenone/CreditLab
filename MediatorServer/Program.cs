@@ -10,6 +10,7 @@ namespace MediatorServer
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Services.AddSingleton(new ServerPaymentService(1000m)); // Adding Start Balance
             builder.Services.AddScoped<IMediatorService, MediatorService>();
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();

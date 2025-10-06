@@ -8,17 +8,24 @@ namespace MediatorServer.Services
         private readonly HttpClient _creditDataClient;
         private readonly HttpClient _fiscoClient;
         private readonly HttpClient _bankClient;
+        private readonly ServerPaymentService _paymentService;
 
-        public MediatorService(IHttpClientFactory httpClientFactory)
+        private const decimal CreditDataRequestCost = 1.5m;
+
+        public MediatorService(IHttpClientFactory httpClientFactory, ServerPaymentService paymentService)
         {
             _creditDataClient = httpClientFactory.CreateClient("CreditDataHub");
             _fiscoClient = httpClientFactory.CreateClient("FiscoEmulator");
             _bankClient = httpClientFactory.CreateClient("BankingEmulator");
+            _paymentService = paymentService;
         }
 
         public async Task<MediatorResultDto> ProcessCreditCheckAsync(string ssn, decimal requestedAmount)
         {
             var result = new MediatorResultDto();
+
+            if (!_paymentService.Charge(CreditDataRequestCost, $"/api/customer/{ssn}"))
+                throw new Exception("Payment failed");
 
             // Get Client Profile
             var profileResponse = await _creditDataClient.GetFromJsonAsync<CustomerProfileDto>($"/api/customer/{ssn}");
