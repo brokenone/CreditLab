@@ -1,5 +1,7 @@
 
+using CreditDataHub.API.Data;
 using CreditDataHub.API.Services;
+using Microsoft.EntityFrameworkCore;
 using Shared.Core.Interfaces;
 
 namespace CreditDataHub.API
@@ -9,6 +11,11 @@ namespace CreditDataHub.API
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            var connectionString = builder.Configuration.GetConnectionString("PostgresConnection");
+
+            builder.Services.AddDbContext<CreditDataContext>(options => 
+                options.UseNpgsql(connectionString));
 
             builder.Services.AddScoped<ICustomerService, CustomerService>();
             builder.Services.AddControllers();
