@@ -19,6 +19,7 @@ namespace CreditDataHub.API
                 options.UseNpgsql(connectionString));
 
             builder.Services.AddScoped<ICustomerService, CustomerService>();
+            builder.Services.AddScoped(typeof(IAppLogger<>), typeof(AppLogger<>));
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -36,6 +37,7 @@ namespace CreditDataHub.API
             }
 
             app.UseHttpsRedirection();
+            app.UseRequestLogging(); // Extension method to add the middleware
             app.UseMiddleware<RequestLoggingMiddleware>();
             app.UseAuthorization();
             app.MapControllers();
