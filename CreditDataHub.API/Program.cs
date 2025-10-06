@@ -3,6 +3,7 @@ using CreditDataHub.API.Data;
 using CreditDataHub.API.Services;
 using Microsoft.EntityFrameworkCore;
 using Shared.Core.Interfaces;
+using Shared.Infrastructure.Logging;
 
 namespace CreditDataHub.API
 {
@@ -23,6 +24,8 @@ namespace CreditDataHub.API
             builder.Services.AddSwaggerGen();
             builder.Services.AddOpenApi();
 
+            builder.Services.AddAppLogger();
+
             var app = builder.Build();
 
             if (app.Environment.IsDevelopment())
@@ -33,6 +36,7 @@ namespace CreditDataHub.API
             }
 
             app.UseHttpsRedirection();
+            app.UseMiddleware<RequestLoggingMiddleware>();
             app.UseAuthorization();
             app.MapControllers();
 

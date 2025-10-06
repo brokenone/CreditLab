@@ -1,6 +1,7 @@
 
 using BankingEmulator.API.Services;
 using Shared.Core.Interfaces;
+using Shared.Infrastructure.Logging;
 
 namespace BankingEmulator.API
 {
@@ -15,6 +16,8 @@ namespace BankingEmulator.API
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddOpenApi();
+
+            builder.Services.AddAppLogger();
 
             var app = builder.Build();
 
